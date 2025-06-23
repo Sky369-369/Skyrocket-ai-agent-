@@ -1,0 +1,22 @@
+import os import random import requests from gtts import gTTS from moviepy.editor import * from datetime import datetime
+
+=== CONFIG ===
+
+BRANDING_LOGO = "branding/logo.png" INTRO_VIDEO = "branding/intro.mp4" OUTRO_VIDEO = "branding/outro.mp4" HASHTAGS_FILE = "hashtags.txt" OUTPUT_DIR = "output"
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+=== STEP 1: Fetch Trending Tech News Headlines ===
+
+def fetch_trending_headline(): try: res = requests.get("https://api.currentsapi.services/v1/latest-news", params={"category": "technology", "apiKey": "demo"}) if res.status_code == 200: articles = res.json().get("news", []) return random.choice(articles).get("title") return "AI Just Broke Another Record in Tech!" except: return "AI Just Broke Another Record in Tech!"
+
+=== STEP 2: Generate Voiceover ===
+
+def generate_voiceover(text, filename): tts = gTTS(text=text) path = os.path.join(OUTPUT_DIR, filename) tts.save(path) return path
+
+=== STEP 3: Create Video with Branding ===
+
+def create_video(voiceover_path, headline): base_clip = ColorClip(size=(720, 1280), color=(10, 10, 10), duration=10)
+
+text = TextClip(headline, fontsize=60, color='white', size=(
+
